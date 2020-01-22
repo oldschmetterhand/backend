@@ -18,6 +18,11 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Test is based on standard mockito testing capabilities
+ * and does not use the built in spring-boot testing features
+ * like @WebMvcTest or @MockBean.
+ * */
 @ExtendWith(MockitoExtension.class)
 public class PersonControllerTest {
 
@@ -34,7 +39,6 @@ public class PersonControllerTest {
     @Test
     @DisplayName("") //TODO add BDD sentence
     void testGetPerson() {
-
         //given
         UUID randomUuid = UUID.randomUUID();
         given(personRepository.getPerson(randomUuid)).willReturn(null);
@@ -44,8 +48,12 @@ public class PersonControllerTest {
 
         //then
         then(personRepository).should(times(1)).getPerson(randomUuid);
-
     }
 
+    @Test
+    @DisplayName("")
+    void testGetPersons(){
 
+
+    }
 }
