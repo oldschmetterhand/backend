@@ -3,13 +3,17 @@ package eu.nampi.backend.unittests.controller;
 import eu.nampi.backend.controller.PersonController;
 import eu.nampi.backend.repository.PersonRepository;
 import eu.nampi.backend.util.JenaUtils;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.Lang;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,25 +39,29 @@ public class PersonControllerTest {
     @InjectMocks
     PersonController personController;
 
-
     @Test
-    @DisplayName("") //TODO add BDD sentence
+    @DisplayName("Given personController /getPerson is called with random UUID, it should call the personRepository exactly once with expected UUID.")
     void testGetPerson() {
         //given
         UUID randomUuid = UUID.randomUUID();
         given(personRepository.getPerson(randomUuid)).willReturn(null);
-
         //when
         personController.getPerson(null, randomUuid, null);
-
         //then
         then(personRepository).should(times(1)).getPerson(randomUuid);
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("getPersons ahould call the jenaUtils exactly once with given mock objects.")
     void testGetPersons(){
-
-
+        //given
+        Model jenaModelMock = Mockito.mock(Model.class);
+        Lang jenaLangMock = Mockito.mock(Lang.class);
+        HttpServletResponse httpServletResponseMock = Mockito.mock(HttpServletResponse.class);
+        given(personRepository.getPersons()).willReturn(jenaModelMock);
+        //when
+        personController.getPersons(jenaLangMock, httpServletResponseMock);
+        //then
+        then(jenaUtils).should(times(1)).writeModel(jenaModelMock,jenaLangMock, httpServletResponseMock);
     }
 }
