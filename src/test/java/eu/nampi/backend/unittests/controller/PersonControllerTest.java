@@ -5,6 +5,7 @@ import eu.nampi.backend.repository.PersonRepository;
 import eu.nampi.backend.util.JenaUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +20,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Test is based on standard mockito testing capabilities
@@ -38,6 +38,12 @@ public class PersonControllerTest {
 
     @InjectMocks
     PersonController personController;
+
+    @BeforeEach
+    void setUp(){
+        doNothing().when(jenaUtils).writeModel(any(), any(), any());
+        reset(personRepository, jenaUtils);
+    }
 
     @Test
     @DisplayName("Given personController /getPerson is called with random UUID, it should call the personRepository exactly once with expected UUID.")
